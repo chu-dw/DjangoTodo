@@ -24,7 +24,7 @@ def todo_post(request):
 
 def todo_edit(request, pk):
     todo = Todo.objects.get(id=pk)
-    if = request.method == "POST":
+    if request.method == "POST":
         form = TodoForm(request.POST, instance=todo)
         if form.is_valid:
             todo = form.save(commit=False)
@@ -33,3 +33,14 @@ def todo_edit(request, pk):
         else:
             form = TodoForm(instance=todo)
         return render(request, 'todo/todo_post.jtml',{'form':form})
+
+def done_list(request):
+    dones = Todo.objects.filter(complete = True)
+    return render(request, 'todo/done_list.html', {'dones':dones})
+
+
+def todo_done(request, pk):
+    todo = Todo.objects.get(id=pk)
+    todo.complete = True
+    todo.save()
+    return redirect('todo_list')
